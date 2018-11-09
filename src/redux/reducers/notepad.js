@@ -17,12 +17,27 @@ const Notepad = (state = {data: []}, action) => {
       return {...state, isFetching: true};
     }
     case types.REMOVE_NOTEPAD_SUCCESS: {
-      console.log('action.payload', action.payload);
       const data = state.data.filter((notepad) => { return notepad.id !== action.payload});
       return {...state, isFetching: false, data: [...data]}
     }
     case types.REMOVE_NOTEPAD_FAIL: {
       return {...state, isFetching: false};
+    }
+
+    case types.UPDATE_NOTEPAD: {
+      return {...state, isFetching: true};
+    }
+    case types.UPDATE_NOTEPAD_SUCCESS: {
+      const data = state.data.map((notepad) => {
+        if (notepad.id == action.payload.id) {
+          return action.payload;
+        }
+        return notepad;
+      });
+      return {...state, isFetching: false, data}
+    }
+    case types.UPDATE_NOTEPAD_FAIL: {
+      return {...state, isFetching: false, error: action.payload.data};
     }
 
     case types.FETCH_NOTEPAD: {

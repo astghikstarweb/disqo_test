@@ -36,7 +36,15 @@ const update = (id, data) => {
   return (dispatch) => {
     dispatch({type: notepadTypes.UPDATE_NOTEPAD});
     Service.update(id, data).then((res) => {
-      dispatch({type: notepadTypes.UPDATE_NOTEPAD_SUCCESS, payload: res})
+      const notes = [];
+      Object.keys(res.data.files).map((key) => {
+        notes.push({
+          title: key,
+          note: res.data.files[key].content
+        });
+      });
+      let data = {id: res.data.id, title: res.data.description, notes: notes};
+      dispatch({type: notepadTypes.UPDATE_NOTEPAD_SUCCESS, payload: data})
     }).catch((error) => {
       dispatch({type: notepadTypes.UPDATE_NOTEPAD_FAIL, payload: normalizeErrorResponse(error)})
     })

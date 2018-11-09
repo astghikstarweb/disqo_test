@@ -21,11 +21,15 @@ class Notepad extends Component {
     this.state.notes.forEach((note) => {
       files[note.title] = {content: note.note};
     });
-    this.props.crateNotePad({description: notepadTitle, files});
+    let notepad = {description: notepadTitle, files};
+    if(this.props.id) {
+      notepad.id = this.props.id;
+    }
+    this.props.crateOrUpdateNotepad(notepad);
   }
 
   remove(id) {
-    this.props.removeNotePad(id);
+    this.props.removeNotepad(id);
   }
 
   addNote(note) {
