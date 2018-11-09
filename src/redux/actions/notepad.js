@@ -47,7 +47,7 @@ const remove = (id) => {
   return (dispatch) => {
     dispatch({type: notepadTypes.REMOVE_NOTEPAD});
     Service.remove(id).then((res) => {
-      dispatch({type: notepadTypes.REMOVE_NOTEPAD_SUCCESS, payload: res})
+      dispatch({type: notepadTypes.REMOVE_NOTEPAD_SUCCESS, payload: id})
     }).catch((error) => {
       dispatch({type: notepadTypes.REMOVE_NOTEPAD_FAIL, payload: normalizeErrorResponse(error)})
     })

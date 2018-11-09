@@ -13,6 +13,18 @@ const Notepad = (state = {data: []}, action) => {
       return {...state, isFetching: false, error: action.payload.data};
     }
 
+    case types.REMOVE_NOTEPAD: {
+      return {...state, isFetching: true};
+    }
+    case types.REMOVE_NOTEPAD_SUCCESS: {
+      console.log('action.payload', action.payload);
+      const data = state.data.filter((notepad) => { return notepad.id !== action.payload});
+      return {...state, isFetching: false, data: [...data]}
+    }
+    case types.REMOVE_NOTEPAD_FAIL: {
+      return {...state, isFetching: false};
+    }
+
     case types.FETCH_NOTEPAD: {
       return {...state, isFetching: true};
     }
