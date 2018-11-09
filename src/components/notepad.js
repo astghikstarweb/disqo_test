@@ -13,6 +13,7 @@ class Notepad extends Component {
     this.remove = this.remove.bind(this);
     this.addNote = this.addNote.bind(this);
     this.deleteNote = this.deleteNote.bind(this);
+    this.updateNote = this.updateNote.bind(this);
   }
 
   save() {
@@ -37,14 +38,15 @@ class Notepad extends Component {
     this.setState({notes});
   }
 
-  updateNote(i, note) {
+  updateNote(key, value, i) {
     let notes = this.state.notes;
-    notes[i] = note; //toDO
+    notes[i][key] = value;
     this.setState({notes});
   }
 
   deleteNote(i) {
-    const notes = this.state.notes.splice(i, 1);
+    let notes = this.state.notes;
+    notes.splice(i, 1);
     this.setState({notes});
   }
 
@@ -91,7 +93,7 @@ class Notepad extends Component {
       </div>
       {
         this.state.notes && this.state.notes.map((note, i) => {
-          return <Note key={i} {...note} id={i} remove={this.deleteNote}/>
+          return <Note key={i} {...note} id={i} remove={this.deleteNote} edit={this.updateNote}/>
         })
       }
     </div>

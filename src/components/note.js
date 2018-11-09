@@ -7,10 +7,10 @@ class Note extends Component {
       <div className="row">
         <div className="col-8">
           <div className="form-group">
-            <input type="text" className="form-control" placeholder="Enter note title" defaultValue={this.props.title || ''}/>
+            <input type="text" className="form-control" ref="noteTitle" placeholder="Enter note title" onChange={() => this.props.edit('title', this.refs.noteTitle.value, this.props.id)} defaultValue={this.props.title || ''}/>
           </div>
           <div className="form-group">
-            <textarea className="form-control" rows="5" defaultValue={this.props.title || ''}/>
+            <textarea className="form-control" ref="noteDescription" rows="5" onChange={(e) => this.props.edit('note', this.refs.noteDescription.value, this.props.id)} defaultValue={this.props.title || ''}/>
           </div>
         </div>
         <div className="col-4">
