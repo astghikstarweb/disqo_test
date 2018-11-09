@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import {connect} from "react-redux";
+import actions from '../redux/actions/notepad';
+import {bindActionCreators} from "redux";
 import Notepad  from '../components/notepad';
 
 class Home extends Component {
@@ -9,34 +12,17 @@ class Home extends Component {
       notepads: []
     };
     this.createNotepad = this.createNotepad.bind(this);
-    this.addNote = this.addNote.bind(this);
-    this.deleteNote = this.deleteNote.bind(this);
-  }
-
-  addNote(note) {console.log('note', note);
-    let selectedNotepad = this.state.newNotepad;
-    const notes = selectedNotepad['notes'] ? [...selectedNotepad['notes'], note] : [note];
-    this.setState({newNotepad: {...selectedNotepad, notes}});
-  }
-
-  updateNote(i, note) {
-    let selectedNotepad = this.state.newNotepad;
-    selectedNotepad['notes'][i] = note
-    this.setState({newNotepad: selectedNotepad});
-  }
-
-  deleteNote(i) {
-    let selectedNotepad = this.state.newNotepad;
-    const notes = selectedNotepad['notes'].splice(i, 1);
-    this.setState({newNotepad: {...selectedNotepad, notes}});
+    this.saveNotepad = this.saveNotepad.bind(this);
   }
 
   createNotepad() {
-    this.setState({newNotepad: {}});
+    this.setState({newNotepad: true});
   }
 
-  saveNotepad() {
-    this.setState({notepads: [this.state.newNotepad, ...this.state.notepads], newNotepad: null});
+  saveNotepad(notepad) {
+    console.log('saveNotepad', notepad);
+    // this.setState({newNotepad: null});
+    this.props.actions.create(notepad);
   }
 
   render() {
@@ -46,10 +32,10 @@ class Home extends Component {
           <button type="button" className="btn btn-danger" onClick={this.createNotepad}>Add notepad</button>
         </div>
       </div>
-      {this.state.newNotepad && <Notepad {...this.state.newNotepad} addNote={this.addNote}/>}
+      {this.state.newNotepad && <Notepad {...this.state.newNotepad} addNote={this.addNote} crateNotePad={this.saveNotepad}/>}
       {this.state.notepads.map((notepad, i) => {
         return <div key={i} className="mt-5">
-          <Notepad {...notepad} index={i} addNote={this.addNote}/>
+          <Notepad {...notepad} id={i}/>
         </div>;
       })
       }
@@ -57,4 +43,15 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = (state) => ({
+
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  actions: bindActionCreators(actions, dispatch),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);
