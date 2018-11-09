@@ -6,8 +6,9 @@ const Notepad = (state = {data: []}, action) => {
       return {...state, isFetching: true};
     }
     case types.ADD_NOTEPAD_SUCCESS: {
-      return {...state, isFetching: false, data: action.payload.data.payload}
+      return {...state, isFetching: false, data: [...state.data, action.payload]}
     }
+
     case types.ADD_NOTEPAD_FAIL: {
       return {...state, isFetching: false, error: action.payload.data};
     }

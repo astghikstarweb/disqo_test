@@ -2,12 +2,19 @@ import notepadTypes from '../types/notepad';
 import Service from '../service/notepad';
 import {normalizeErrorResponse} from "../../util/helper";
 
-
 const create = (data) => {
   return (dispatch) => {
     dispatch({type: notepadTypes.ADD_NOTEPAD});
     Service.create(data).then((res) => {
-      dispatch({type: notepadTypes.ADD_NOTEPAD_SUCCESS, payload: res})
+      const notes = [];
+      Object.keys(res.data.files).map((key) => {
+        notes.push({
+          title: key,
+          note: res.data.files[key].content
+        });
+      });
+      let data = {id: res.data.id, title: res.data.description, notes: notes};
+      dispatch({type: notepadTypes.ADD_NOTEPAD_SUCCESS, payload: data})
     }).catch((error) => {
       dispatch({type: notepadTypes.ADD_NOTEPAD_FAIL, payload: normalizeErrorResponse(error)})
     })

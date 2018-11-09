@@ -13,6 +13,7 @@ class Home extends Component {
     };
     this.createNotepad = this.createNotepad.bind(this);
     this.saveNotepad = this.saveNotepad.bind(this);
+    this.removeNotePad = this.removeNotePad.bind(this);
   }
 
   createNotepad() {
@@ -21,8 +22,12 @@ class Home extends Component {
 
   saveNotepad(notepad) {
     console.log('saveNotepad', notepad);
-    // this.setState({newNotepad: null});
     this.props.actions.create(notepad);
+    this.setState({newNotepad: null});
+  }
+
+  removeNotePad(id) {
+    this.props.actions.remove(id);
   }
 
   render() {
@@ -33,9 +38,9 @@ class Home extends Component {
         </div>
       </div>
       {this.state.newNotepad && <Notepad {...this.state.newNotepad} addNote={this.addNote} crateNotePad={this.saveNotepad}/>}
-      {this.state.notepads.map((notepad, i) => {
+      {this.props.notepads && this.props.notepads.map((notepad, i) => {
         return <div key={i} className="mt-5">
-          <Notepad {...notepad} id={i}/>
+          <Notepad {...notepad} removeNotePad={this.removeNotePad}/>
         </div>;
       })
       }
@@ -44,7 +49,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = (state) => ({
-
+  notepads: state.Notepad.data,
 });
 
 const mapDispatchToProps = (dispatch) => ({

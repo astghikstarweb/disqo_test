@@ -10,6 +10,7 @@ class Notepad extends Component {
       notes: []
     };
     this.save = this.save.bind(this);
+    this.remove = this.remove.bind(this);
     this.addNote = this.addNote.bind(this);
     this.deleteNote = this.deleteNote.bind(this);
   }
@@ -18,10 +19,13 @@ class Notepad extends Component {
     const notepadTitle = this.refs.notepadTitle.value;
     const files  = {};
     this.state.notes.forEach((note) => {
-      console.log('note', note);
       files[note.title] = {content: note.note};
     });
     this.props.crateNotePad({description: notepadTitle, files});
+  }
+
+  remove(id) {
+    this.props.removeNotePad(id);
   }
 
   addNote(note) {
@@ -40,8 +44,17 @@ class Notepad extends Component {
     this.setState({notes});
   }
 
-  componentWillReceiveProps() {
-    this.setState({notes: this.props.notes})
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.notes) {
+      this.setState({notes: nextProps.notes})
+    }
+
+  }
+
+  componentDidMount() {
+    if(this.props.notes) {
+      this.setState({notes: this.props.notes})
+    }
   }
 
   render() {
@@ -50,13 +63,13 @@ class Notepad extends Component {
         <div className="col-8">
           <div className="form-group">
             <label>Notepad Title</label>
-            <input type="text" ref="notepadTitle" className="form-control" placeholder="My notepad title..."/>
+            <input type="text" ref="notepadTitle" className="form-control" defaultValue={this.props.title || ''} placeholder="My notepad title..."/>
           </div>
         </div>
         <div className="col-4">
           <div className="form-group">
             <button type="button" className="btn btn-primary mr-5" onClick={this.save}>Save</button>
-            <button type="button" className="btn btn-danger">Delete</button>
+            <button type="button" className="btn btn-danger" onClick={() => this.remove(this.props.id)}>Delete</button>
           </div>
         </div>
       </div>
